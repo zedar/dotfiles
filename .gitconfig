@@ -1,0 +1,12 @@
+[alias]
+        co = checkout
+        br = branch
+        ci = commit
+        st = status
+        lsl = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+        ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+        ls = log -n 40 --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+        psub = git pull --recurse-submodules
+        psubf = git pull --recurse-submodules --force
+        lg = log --graph --oneline --decorate --all
+
