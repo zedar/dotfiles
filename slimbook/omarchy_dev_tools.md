@@ -65,3 +65,24 @@ sudo pacman -S just
 ```bash
 sudo pacman -S ansible
 ```
+
+### Google cloud CLI
+
+```bash
+mise search gcloud
+# Tool    Description                                                                
+# gcloud  GCloud CLI (Google Cloud SDK). https://github.com/mise-plugins/vfox-gcloud
+# install latest version of gcloud CLI
+mise install gcloud
+# activate it globally
+mise use -g gcloud
+```
+
+Configure gcloud
+
+```bash
+gcloud auth login
+gcloud components list
+gcloud components install beta
+gcloud beta interactive
+```
