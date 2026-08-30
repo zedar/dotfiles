@@ -67,7 +67,7 @@ Because Limine relies on exact physical file listings to build its boot menu sel
 yay -S slimbook-quirk-i8042-wakeup slimbook-quirk-i8042-reset
 # to remove
 sudo pacman -Rns slimbook-quirk-i8042-wakeup
-sudo pacman -Rns slimbook-quirk-i8042-reset
+sudo pacman -Rns slimbook-quirk-i8042-wakeup
 ```
 
 ---
