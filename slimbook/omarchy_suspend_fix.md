@@ -28,6 +28,12 @@ sudo pacman -S linux-lts linux-lts-headers
 
 *(Note: Omarchy's packaging hooks automatically handle the execution of `mkinitcpio` in the background to build the necessary safe initramfs ramdisk files).*
 
+Command to check if there is an updated linux-lts
+
+```bash
+sudo pacman -Q linux-lts
+```
+
 ### Step 3: Link the New Images to Limine
 
 Because Limine relies on exact physical file listings to build its boot menu selections, the configurations were updated to allow dual-boot execution.
