@@ -78,6 +78,34 @@ sudo pacman -Rns slimbook-quirk-i8042-wakeup
 
 ---
 
+## Omarchy Quattro (quickshell)
+
+### Diagnosis
+
+Confirmed root cause — in Quattro (Omarchy 4), the old `hypridle` suspend listener in `~/.config/hypr/hypridle.conf` is a dead artifact:
+* `hypridle` is not installed, nothing launches it (`autostart.lua` is empty)
+* Idle is handled by the Quickshell `omarchy.idle` service (`/usr/share/omarchy/shell/plugins/services/idle/Service.qml`) — it only implements `idle.screensaver` (120s) and `idle.lock` (150s)
+* Everything else is healthy: manual `systemctl` suspend works, the sleep monitor locks-before-suspend inhibitor runs, and lid-close suspend is still handled by logind (HandleLidSwitch=suspend)
+
+### Fix
+
+Clone the idle service plugin and add a suspend step — fully integrated with stay-awake, activity-cancel, and lock state:
+
+1. `~/.config/omarchy/plugins/slimbook.idle/` — entire directory (3 files: `Service.qml`, `IdleModel.js`, `manifest.json`). Your user-owned clone of `omarchy.idle` with suspend support. Changes to Service.qml vs built-in:
+* `idle.suspend` config key (seconds since idle began; 0/unset = disabled)
+* `suspendTimer` armed at idle-cycle start, survives the lock, cleared only on activity/cancel/stay-awake
+* Fires `requestSuspend()` → live guard: Discharging in BAT*/status + omarchy-shell lock isLocked → systemctl suspend; skips are logged to journald (-t omarchy-idle)
+* `omarchy-shell` idle status now reports suspend, suspendArmed, timers/processes
+1. ``~/.config/omarchy/shell.json` — full file. Key parts: "idle": { "screensaver": 120, "lock": 150, "suspend": 600 } plus the clone rewiring (plugins: [slimbook.idle], disabledPlugins: [omarchy.idle], cloneSourceRestores: [...])
+
+Result: on battery → screensaver 2m, lock 2.5m, auto-suspend 10m. Plugged in → lock only, never auto-suspends. omarchy toggle idle stay-awake suppresses everything, including suspend. Lock-before-suspend already guaranteed by the existing sleep monitor.
+
+Verified: service loads clean (service-ready, no QML errors), idle status shows correct timings, guard tested live on battery → correctly logged skipped: system not locked.
+
+Revert anytime: `omarchy plugin remove slimbook.idle` restores the built-in, or disable it `omarchy plugin disable slimbook.idle`
+
+---
+
 ## 💡 Key Takeaways & Long-Term Management
 
 * **Co-Existing Architecture:** The original rolling kernel (`7.1.4`) is still intact on the drive. No packages or modifications were destroyed during the deployment.

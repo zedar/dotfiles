@@ -1,66 +1,72 @@
 # Omarchy custom configuration
 
-## Monitor scaling (Hyprland)
+## Terminal
 
-`~/.config/hypr/monitors.conf`
+### Foot (default terminal for Quattro)
+
+`~/.config/foot/foot.ini`
 
 ```
-env = GDK_SCALE,2
-monitor=,preferred,auto,2
+
+font=JetBrainsMono Nerd Font:size=11
 ```
 
-## Terminal (alacritty) font size
+### Alacritty
 
 `~/.config/alacritty/alacritty.toml`
 
 ```
 [font]
 ...
-size = 10
+size = 11
 ```
 
-## Keyboard (pl)
+## Hyprland (window manager)
 
-`~/.config/hypr/input.conf`
+### Monitor scaling
 
+`~/.config/hypr/monitors.lua`
+
+```lua
+local omarchy_gdk_scale = 2
 ```
+
+### Keyboard (pl)
+
+`~/.config/hypr/input.lua`
+
+```lua
 kb_layout=pl,us
 ```
 
-## Touchpad natural scrolling
+### Touchpad natural scrolling
 
-`~/.config/hypr/input.conf`
+`~/.config/hypr/input.lua`
 
-```
+```lua
 touchpad {
-  # use natural (inverse) scrolling
+  -- use natural (inverse) scrolling
   natural_scroll = true
 }
 ```
 
-## Follow mouse
+### Follow mouse
 
-`~/.config/hypr/input.conf`
+`~/.config/hypr/input.lua`
 
-```
-# You must click a window to focus it with the mouse
+```lua
+-- You must click a window to focus it with the mouse
 follow_mouse = 2
 ```
 
-# hypr additional bindings
+### hypr additional bindings
 
-```bash
-# Change full screen with full width full screen
-unbind = SUPER, F
-unbind = SUPER ALT, F
-bindd = SUPER ALT, F, Full screen, fullscreen, 0
-bindd = SUPER, F, Full width, fullscreen, 1
+`~/.config/hypr/bindings.lua`
 
-# Activate window in a group by number
-
-bindd = SUPER CTRL, code:10, Switch to group window 1, changegroupactive, 1
-bindd = SUPER CTRL, code:11, Switch to group window 2, changegroupactive, 2
-bindd = SUPER CTRL, code:12, Switch to group window 3, changegroupactive, 3
-bindd = SUPER CTRL, code:13, Switch to group window 4, changegroupactive, 4
-bindd = SUPER CTRL, code:14, Switch to group window 5, changegroupactive, 5
+```lua
+-- Change full screen with full width full screen
+hl.unbind("SUPER + F")
+hl.unbind("SUPER + ALT + F")
+o.bind("SUPER + F", "Full width", hl.dsp.window.fullscreen({ mode = "maximized" }))
+o.bind("SUPER + ALT + F", "Full screen", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 ```
