@@ -86,3 +86,29 @@ gcloud components list
 gcloud components install beta
 gcloud beta interactive
 ```
+
+## AI tools
+
+## opencode
+
+TensorX is an open weight provider hosting models in Europe. Generate API key and call `/connect` to connect to TensorX.
+If some models are not available add missing to `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "autoupdate": false,
+  "provider": {
+    "tensorx": {
+      "models": {
+        "qwen/qwen3.8-flash-next": {
+          "name": "Qwen3.8-flash-next"
+        },
+        "z-ai/glm-5.3-flashqwen": {
+          "name": "GLM-5.3-flash"
+        }
+      }
+    }
+  }
+}
+```
